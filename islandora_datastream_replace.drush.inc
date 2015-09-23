@@ -86,7 +86,7 @@ function islandora_datastream_replace_create_batch() {
  */
 function islandora_datastream_replace_batch_operation($namespace, $source, &$context) {
   $sandbox = &$context['sandbox'];
-  $export_objects = 10;
+  $export_objects = 10000;
  
   // replace solr query with query of source directory
   // scandir
