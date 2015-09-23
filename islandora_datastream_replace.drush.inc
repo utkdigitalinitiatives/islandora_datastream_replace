@@ -96,24 +96,7 @@ function islandora_datastream_replace_batch_operation($namespace, $source, &$con
   $lscommand="ls -1 $source/$nspart*.xml | wc -l";
   $numfiles=exec($lscommand);
   $dsid='MODS';
-  
-
-  if (!isset($sandbox['offset'])) {
-    $sandbox['total'] = $numfiles;
-    $sandbox['offset'] = 0;
-  }
-  $context['message'] = t('Processing results @start to @end.', array(
-    '@start' => $sandbox['offset'],
-    '@end' => min($sandbox['offset'] + $export_objects, $sandbox['total']),
-  ));
-  /*
-
-  $qp->solrLimit = $export_objects;
-  $qp->solrStart = $sandbox['offset'];
-  $qp->executeQuery();
-  $results = $qp->islandoraSolrResult['response']['objects'];
-  */
-
+  // loop through files
   foreach ($files as $fil) {
     if ((substr($fil,-4,4)=='.xml')&&(strstr($fil,$nspart))) {
       // get name without extension
@@ -155,6 +138,4 @@ function islandora_datastream_replace_batch_operation($namespace, $source, &$con
       }
     }// end if right file
   }// end foreach
-  $sandbox['offset'] += $export_objects;
-  $context['finished'] = $sandbox['offset'] / $sandbox['total'];
 }// end function
