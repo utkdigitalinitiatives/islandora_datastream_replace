@@ -86,10 +86,8 @@ function islandora_datastream_replace_create_batch() {
  */
 function islandora_datastream_replace_batch_operation($namespace, $source, &$context) {
   $sandbox = &$context['sandbox'];
-  $export_objects = 10000;
- 
-  // replace solr query with query of source directory
-  // scandir
+  //  query of source directory
+  //
   $files = scandir($source);
   $nspart=$namespace.'_';
   //count expected files in this directory for sandbox
@@ -98,6 +96,7 @@ function islandora_datastream_replace_batch_operation($namespace, $source, &$con
   $dsid='MODS';
   // loop through files
   foreach ($files as $fil) {
+    // work with xml files only
     if ((substr($fil,-4,4)=='.xml')&&(strstr($fil,$nspart))) {
       // get name without extension
       $xbase=basename($fil,'.xml');
@@ -105,12 +104,12 @@ function islandora_datastream_replace_batch_operation($namespace, $source, &$con
       $xparts=explode('_',$xbase); 
       //find namespace equivalent
       $nstest=$xparts[0];
-      print "/n nstest=$nstest /n";
+      print "\n nstest=$nstest \n";
       //get number part of pid 
       $pidnum=$xparts[1];
       print "pidnum=$pidnum /n";
       if ($nstest!=$namespace) {
-        print "/n bad namespace /n";
+        print " bad namespace \n";
         exit();
       }
       // assemble filename that is like pid
