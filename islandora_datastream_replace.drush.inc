@@ -125,6 +125,7 @@ function islandora_datastream_replace_batch_operation($namespace, $source, &$con
         $source_directory = $source.'/'.$pidname.'.xml';
         $object[$dsid]->setContentFromFile($source_directory);
         $success = TRUE;
+        rename($source_directory,"$source_directory".".used");
       }
       else {
         $success = FALSE;
