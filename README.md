@@ -2,8 +2,8 @@
 
 ## Introduction
 
-This module provides a Drush script that can be used to bulk replace existing datastreams
-given a Solr query.
+This module provides a Drush script that can be used to bulk replace existing MODS datastreams
+given a directory of files.
 
 ## Requirements
 
@@ -28,7 +28,7 @@ Examples:
  drush -u 1 islandora_datastream_replace  --source=/tmp --namespace=islandora
 
 Options:
- --dsid                                    The datastream id of to be exported datastream. Required.
+ --namespace                               The namespace to match the pid named files with. Required.
  --source                                  The directory to get the files of the datastreams from. Required.
   ```
 
