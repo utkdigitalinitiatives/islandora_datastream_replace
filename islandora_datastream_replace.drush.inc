@@ -100,8 +100,8 @@ function islandora_datastream_replace_batch_operation($namespace, $source, &$con
   $dsid='MODS';
   // loop through files
   foreach ($files as $fil) {
-    // work with xml files only
-    if ((substr($fil,-4,4)=='.xml')&&(strstr($fil,$nspart))) {
+    // work with files that are not the '.used' only
+    if ((substr($fil,-5,5)!='.used')&&(strstr($fil,$nspart))) {
       // get name without extension
       $xbase=basename($fil,'.xml');
       // get pieces of filename
