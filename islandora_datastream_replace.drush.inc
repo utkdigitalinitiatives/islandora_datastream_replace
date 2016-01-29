@@ -66,6 +66,7 @@ function islandora_datastream_replace_create_batch() {
         array(
           drush_get_option('namespace'),
           drush_get_option('source'),
+          drush_get_option('dsid'),
         ),
       ),
     ),
@@ -88,7 +89,7 @@ function islandora_datastream_replace_create_batch() {
  * @param array $context
  *   The context of the Drupal batch.
  */
-function islandora_datastream_replace_batch_operation($namespace, $source, &$context) {
+function islandora_datastream_replace_batch_operation($namespace, $source, $dsid, &$context) {
   $sandbox = &$context['sandbox'];
   //  query of source directory
   //
@@ -97,7 +98,6 @@ function islandora_datastream_replace_batch_operation($namespace, $source, &$con
   //count expected files in this directory for sandbox
   $lscommand="ls -1 $source/$nspart*.xml | wc -l";
   $numfiles=exec($lscommand);
-  $dsid='MODS';
   // loop through files
   foreach ($files as $fil) {
     // work with files that are not the '.used' only
