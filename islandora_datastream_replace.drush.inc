@@ -103,7 +103,9 @@ function islandora_datastream_replace_batch_operation($namespace, $source, &$con
     // work with files that are not the '.used' only
     if ((substr($fil,-5,5)!='.used')&&(strstr($fil,$nspart))) {
       // get name without extension
-      $xbase=basename($fil,'.xml');
+      $xbase=pathinfo($fil, PATHINFO_FILENAME);
+      // save the extension
+      $exten=pathinfo($fil, PATHINFO_EXTENSION);
       // get pieces of filename
       $xparts=explode('_',$xbase); 
       //find namespace equivalent
@@ -126,7 +128,7 @@ function islandora_datastream_replace_batch_operation($namespace, $source, &$con
       $object = islandora_object_load($pid);
       if (isset($object[$dsid])) {
         // assemble current source filename
-        $source_directory = $source.'/'.$pidname.'.xml';
+        $source_directory = $source.'/'.$pidname.'.'.$exten;
         $object[$dsid]->setContentFromFile($source_directory);
         $success = TRUE;
         rename($source_directory,"$source_directory".".used");
