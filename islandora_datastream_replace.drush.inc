@@ -96,7 +96,7 @@ function islandora_datastream_replace_batch_operation($namespace, $source, $dsid
   $files = scandir($source);
   $nspart=$namespace.'_';
   //count expected files in this directory for sandbox
-  $lscommand="ls -1 $source/$nspart*.xml | wc -l";
+  $lscommand="ls -1 $source/$nspart* | wc -l";
   $numfiles=exec($lscommand);
   // loop through files
   foreach ($files as $fil) {
