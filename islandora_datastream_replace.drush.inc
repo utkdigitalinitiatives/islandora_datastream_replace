@@ -21,13 +21,17 @@ function islandora_datastream_replace_drush_command() {
         'description' => dt('The directory to get the datastreams and pid# from.'),
         'required' => TRUE,
       ),
-    ),
+     'dsid' => array(
+        'description' => dt('The datastream id of the datastream.'),
+        'required' => TRUE,
+      ),
+     ),
     'aliases' => array('idre'),
     'drupal dependencies' => array(
       'islandora',
     ),
     'examples' => array(
-      'drush -u 1 islandora_datastream_replace --source=/tmp --namespace=test2 ' => dt('Replacing MODS datastream in object.'),
+      'drush -u 1 islandora_datastream_replace --source=/tmp-- dsid=MODS --namespace=test2 ' => dt('Replacing MODS datastream in object.'),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
