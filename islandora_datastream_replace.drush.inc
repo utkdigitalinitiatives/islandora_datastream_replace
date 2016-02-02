@@ -21,13 +21,17 @@ function islandora_datastream_replace_drush_command() {
         'description' => dt('The directory to get the datastreams and pid# from.'),
         'required' => TRUE,
       ),
-    ),
+     'dsid' => array(
+        'description' => dt('The datastream id of the datastream.'),
+        'required' => TRUE,
+      ),
+     ),
     'aliases' => array('idre'),
     'drupal dependencies' => array(
       'islandora',
     ),
     'examples' => array(
-      'drush -u 1 islandora_datastream_replace --source=/tmp --namespace=test2 ' => dt('Replacing MODS datastream in object.'),
+      'drush -u 1 islandora_datastream_replace --source=/tmp-- dsid=MODS --namespace=test2 ' => dt('Replacing MODS datastream in object.'),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
@@ -62,6 +66,7 @@ function islandora_datastream_replace_create_batch() {
         array(
           drush_get_option('namespace'),
           drush_get_option('source'),
+          drush_get_option('dsid'),
         ),
       ),
     ),
@@ -84,22 +89,28 @@ function islandora_datastream_replace_create_batch() {
  * @param array $context
  *   The context of the Drupal batch.
  */
-function islandora_datastream_replace_batch_operation($namespace, $source, &$context) {
+function islandora_datastream_replace_batch_operation($namespace, $source, $dsid, &$context) {
   $sandbox = &$context['sandbox'];
+  // limit type of DSID
+  if (($dsid!='MODS')||($dsid!='HOCR')||($dsid!='OCR')||($dsid!='TN')) {
+        print " DSID is not enabled \n";
+        exit();
+      }
   //  query of source directory
   //
   $files = scandir($source);
   $nspart=$namespace.'_';
   //count expected files in this directory for sandbox
-  $lscommand="ls -1 $source/$nspart*.xml | wc -l";
+  $lscommand="ls -1 $source/$nspart* | wc -l";
   $numfiles=exec($lscommand);
-  $dsid='MODS';
   // loop through files
   foreach ($files as $fil) {
-    // work with xml files only
-    if ((substr($fil,-4,4)=='.xml')&&(strstr($fil,$nspart))) {
+    // work with files that are not the '.used' only
+    if ((substr($fil,-5,5)!='.used')&&(strstr($fil,$nspart))) {
       // get name without extension
-      $xbase=basename($fil,'.xml');
+      $xbase=pathinfo($fil, PATHINFO_FILENAME);
+      // save the extension
+      $exten=pathinfo($fil, PATHINFO_EXTENSION);
       // get pieces of filename
       $xparts=explode('_',$xbase); 
       //find namespace equivalent
@@ -122,7 +133,7 @@ function islandora_datastream_replace_batch_operation($namespace, $source, &$con
       $object = islandora_object_load($pid);
       if (isset($object[$dsid])) {
         // assemble current source filename
-        $source_directory = $source.'/'.$pidname.'.xml';
+        $source_directory = $source.'/'.$pidname.'.'.$exten;
         $object[$dsid]->setContentFromFile($source_directory);
         $success = TRUE;
         rename($source_directory,"$source_directory".".used");

@@ -25,10 +25,11 @@ Output of ```drush islandora_datastream_replace --help:```
 Scans a source directory and replaces datastreams according to the given namespace and the filenames.
 
 Examples:
- drush -u 1 islandora_datastream_replace  --source=/tmp --namespace=islandora
+ drush -u 1 islandora_datastream_replace --dsid=MODS --source=/tmp --namespace=islandora
 
 Options:
  --namespace                               The namespace to match the pid named files with. Required.
+ --dsid                                    The datastream id of the datastream. Required.
  --source                                  The directory to get the files of the datastreams from. Required.
   ```
 
