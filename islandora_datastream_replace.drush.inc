@@ -86,22 +86,26 @@ function islandora_datastream_replace_create_batch() {
  *   The namespace to work in.
  * @param string $source
  *   The source directory to read the files from.
+ * @param string $dsid
+ *   The datastream id to be replaced.
  * @param array $context
  *   The context of the Drupal batch.
  */
 function islandora_datastream_replace_batch_operation($namespace, $source, $dsid, &$context) {
   $sandbox = &$context['sandbox'];
   // limit type of DSID
-  if (($dsid!='MODS')||($dsid!='HOCR')||($dsid!='OCR')||($dsid!='TN')) {
+  if (($dsid!='MODS')&&($dsid!='HOCR')&&($dsid!='OCR')&&($dsid!='TN')) {
         print " DSID is not enabled \n";
         exit();
       }
   //  query of source directory
-  //
+  //  files should be in the same form as the output from the
+  // islandora_datastream_export module
+  //  namespace_pidnumber_dsid.ext
   $files = scandir($source);
   $nspart=$namespace.'_';
   //count expected files in this directory for sandbox
-  $lscommand="ls -1 $source/$nspart* | wc -l";
+  $lscommand="ls -1 $source/$nspart*$dsid* | wc -l";
   $numfiles=exec($lscommand);
   // loop through files
   foreach ($files as $fil) {
@@ -115,16 +119,22 @@ function islandora_datastream_replace_batch_operation($namespace, $source, $dsid
       $xparts=explode('_',$xbase); 
       //find namespace equivalent
       $nstest=$xparts[0];
+      $dsidtest=$xparts[2];
+      if ($dsidtest!=$dsid) {
+        print "dsid=$dsid  filename=$xbase \n";
+        print " dsid is not in filename! \n";
+        continue;
+      }
       print "\n nstest=$nstest \n";
       //get number part of pid 
       $pidnum=$xparts[1];
       print "pidnum=$pidnum /n";
       if ($nstest!=$namespace) {
         print " bad namespace \n";
-        exit();
+        continue;
       }
       // assemble filename that is like pid
-      $pidname=$nstest.'_'.$pidnum;
+      $pidname=$nstest.'_'.$pidnum.'_'.$dsid;
       //  assemble pid from filename parts
       $pid=$nstest.':'.$pidnum;      
       // prepare tuque and islandora includes
