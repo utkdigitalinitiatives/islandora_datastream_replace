@@ -31,7 +31,7 @@ function islandora_datastream_replace_drush_command() {
       'islandora',
     ),
     'examples' => array(
-      'drush -u 1 islandora_datastream_replace --source=/tmp-- dsid=MODS --namespace=test2 ' => dt('Replacing MODS datastream in object.'),
+      'drush -u 1 islandora_datastream_replace --source=/tmp --dsid=MODS --namespace=test2 ' => dt('Replacing MODS datastream in object.'),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
