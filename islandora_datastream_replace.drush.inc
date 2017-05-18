@@ -105,12 +105,12 @@ function islandora_datastream_replace_batch_operation($namespace, $source, $dsid
   $files = scandir($source);
   $nspart=$namespace.'_';
   //count expected files in this directory for sandbox
-  $lscommand="ls -1 $source/$nspart*$dsid* | wc -l";
+  $lscommand="ls -1 $source/*$dsid* | wc -l";
   $numfiles=exec($lscommand);
   // loop through files
   foreach ($files as $fil) {
     // work with files that are not the '.used' only
-    if ((substr($fil,-5,5)!='.used')&&(strstr($fil,$nspart))) {
+    if (substr($fil,-5,5)!='.used') {
       // get name without extension
       $xbase=pathinfo($fil, PATHINFO_FILENAME);
       // save the extension
@@ -125,13 +125,13 @@ function islandora_datastream_replace_batch_operation($namespace, $source, $dsid
         print " dsid is not in filename! \n";
         continue;
       }
-      print "\n nstest=$nstest \n";
+      print "\n file = $xbase \n";
       //get number part of pid 
       $pidnum=$xparts[1];
       print "pidnum=$pidnum /n";
       if ($nstest!=$namespace) {
-        print " bad namespace \n";
-        continue;
+        print "\n extra namespace: $nstest \n";
+        //continue;
       }
       // assemble filename that is like pid
       $pidname=$nstest.'_'.$pidnum.'_'.$dsid;
