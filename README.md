@@ -37,6 +37,19 @@ Options:
 The user option (-u) needs to be specified or errors could be
 encountered when attempting to write the contents of the datastream to a file.
 
+### How to Name Files
+
+Islandora Datastream Replace expects files to be named with the namespace plus the pid plus the datastream id plus the extension all separated by underscopes.
+
+For instance, if your namespace was scopes and your DSID was MODS, you filenames should look like this:
+
+```
+scopes_1_MODS.xml
+scopes_10_MODS.xml
+scopes_100_MODS.xml
+scopes_11_MODS.xml
+```
+
 ## Maintainers/Sponsors
 
 Current maintainers:
