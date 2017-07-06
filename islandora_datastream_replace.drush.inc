@@ -31,7 +31,7 @@ function islandora_datastream_replace_drush_command() {
       'islandora',
     ),
     'examples' => array(
-      'drush -u 1 islandora_datastream_replace --source=/tmp-- dsid=MODS --namespace=test2 ' => dt('Replacing MODS datastream in object.'),
+      'drush -u 1 islandora_datastream_replace --source=/tmp --dsid=MODS --namespace=test2 ' => dt('Replacing MODS datastream in object.'),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
@@ -105,12 +105,12 @@ function islandora_datastream_replace_batch_operation($namespace, $source, $dsid
   $files = scandir($source);
   $nspart=$namespace.'_';
   //count expected files in this directory for sandbox
-  $lscommand="ls -1 $source/$nspart*$dsid* | wc -l";
+  $lscommand="ls -1 $source/*$dsid* | wc -l";
   $numfiles=exec($lscommand);
   // loop through files
   foreach ($files as $fil) {
     // work with files that are not the '.used' only
-    if ((substr($fil,-5,5)!='.used')&&(strstr($fil,$nspart))) {
+    if (substr($fil,-5,5)!='.used') {
       // get name without extension
       $xbase=pathinfo($fil, PATHINFO_FILENAME);
       // save the extension
@@ -125,13 +125,13 @@ function islandora_datastream_replace_batch_operation($namespace, $source, $dsid
         print " dsid is not in filename! \n";
         continue;
       }
-      print "\n nstest=$nstest \n";
+      print "\n file = $xbase \n";
       //get number part of pid 
       $pidnum=$xparts[1];
       print "pidnum=$pidnum /n";
       if ($nstest!=$namespace) {
-        print " bad namespace \n";
-        continue;
+        print "\n extra namespace: $nstest \n";
+        //continue;
       }
       // assemble filename that is like pid
       $pidname=$nstest.'_'.$pidnum.'_'.$dsid;
@@ -144,6 +144,8 @@ function islandora_datastream_replace_batch_operation($namespace, $source, $dsid
       if (isset($object[$dsid])) {
         // assemble current source filename
         $source_directory = $source.'/'.$pidname.'.'.$exten;
+        $mimetype = file_get_mimetype($source_directory);
+        $object[$dsid]->mimetype = $mimetype;
         $object[$dsid]->setContentFromFile($source_directory);
         $success = TRUE;
         rename($source_directory,"$source_directory".".used");
