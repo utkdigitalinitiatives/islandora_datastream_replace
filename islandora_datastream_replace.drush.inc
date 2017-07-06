@@ -144,6 +144,8 @@ function islandora_datastream_replace_batch_operation($namespace, $source, $dsid
       if (isset($object[$dsid])) {
         // assemble current source filename
         $source_directory = $source.'/'.$pidname.'.'.$exten;
+        $mimetype = file_get_mimetype($source_directory);
+        $object[$dsid]->mimetype = $mimetype;
         $object[$dsid]->setContentFromFile($source_directory);
         $success = TRUE;
         rename($source_directory,"$source_directory".".used");
