@@ -94,7 +94,7 @@ function islandora_datastream_replace_create_batch() {
 function islandora_datastream_replace_batch_operation($namespace, $source, $dsid, &$context) {
   $sandbox = &$context['sandbox'];
   // limit type of DSID
-  if (($dsid!='MODS')&&($dsid!='HOCR')&&($dsid!='OCR')&&($dsid!='TN')) {
+  if (($dsid!='MODS')&&($dsid!='HOCR')&&($dsid!='OCR')&&($dsid!='TN')&&($dsid!='PREVIEW')) {
         print " DSID is not enabled \n";
         exit();
       }
